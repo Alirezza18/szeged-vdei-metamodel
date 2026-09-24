@@ -1,0 +1,27 @@
+# ---- Data artifacts are computed on Kaggle and live in the private Kaggle
+#      datasets szeged-envimet-raw / szeged-vdei-processed; never commit them ----
+*.npz
+*.nc
+*.zip
+*.pt
+data/
+models/
+predictions/
+tables/
+figures/
+logs/
+backup/
+*.joblib
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# ---- OS / editor ----
+.DS_Store
+Thumbs.db
+desktop.ini
