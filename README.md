@@ -62,6 +62,38 @@ Locally, most CPU stages run as-is after `pip install -r requirements.txt`
 - Vertical context: K = 7 window with nearest-valid-air hole filling
 - Targets: T, RH, wind speed, TKE, TMRT (air head); Twall, Qsens, SWabs, LWbal (facade head, X-facade system)
 
+## Data availability
+
+All simulation data are versioned as two **private** Kaggle datasets (not
+redistributed with this repository):
+
+| Dataset | Content | Format |
+|---|---|---|
+| `szeged-envimet-raw` | Raw ENVI-met NetCDF output for the two sites (`Urban_Canyon.nc`, `Main_Plaza.nc`), GB-scale each | `.nc` |
+| `szeged-vdei-processed` | All 18 sealed S2 artifacts (9 per site) + manifest + diagnostics | `.npz`, `.csv`, `.png` |
+
+Sealed artifacts per site (`01_Data/02_Processed/` in the processed dataset):
+
+`geometry` · `vdei_raw` · `vdei_features` · `bbox` · `targets_forcing` ·
+`split` · `kwindow` · `svf` · `facade_targets`
+
+Every artifact is hash-sealed (blake2b-128) in
+`01_Data/03_Metadata/s2_manifest.csv`, together with file size, key count,
+array shapes and dtypes, and target NaN% / range checks. The bootstrap cells
+(`scripts/cell02_...py`) re-verify all hashes on every fresh Kaggle session,
+so any corrupted download fails fast before training.
+
+Resulting sample pools (from the sealed split, `scripts/cell23_...py`):
+
+| Site | Air points | Timesteps | Facade-adjacent | Train / Val / Test points |
+|---|---|---|---|---|
+| canyon | 2,610,840 | 25 | 16,753 | 1,844,220 / 352,340 / 414,280 |
+| plaza | 929,799 | 49 | 9,566 | 645,898 / 145,476 / 138,425 |
+
+Access: the datasets are private during peer review. Access requests can be
+made via the corresponding author; on acceptance the processed dataset will
+be made available.
+
 ## Citation
 
 If you use this code, please cite the corresponding paper (citation to be
